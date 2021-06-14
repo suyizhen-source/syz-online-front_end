@@ -115,15 +115,31 @@ export default {
                 console.log(this.list)
                 console.log(this.total)
             })
-            .catch(error => {
-                console.log(error)
-            })
         },
         resetData(){
             //表单输入项数据清空
             this.teacherQuery = {}
             //查询所有讲师数据
             this.getList()
+        },
+        removeDataById(id){
+          this.$confirm('此操作将永久删除讲师记录, 是否继续?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() =>{
+                teacher.deleteById(id)
+                .then(() =>{
+                  //提示信息
+                  this.$message({
+                      type: 'success',
+                      message: '删除成功!'
+                    });
+                  //回到列表页面
+                  this.getList()
+            })
+          })
+          
         }
     }
 }
