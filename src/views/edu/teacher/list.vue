@@ -90,7 +90,7 @@
   </div>
 </template>
 <script>
-import teacher from '@/api/edu/teacher'
+import teacherApi from '@/api/edu/teacher'
 export default {
     data(){
         return{
@@ -108,7 +108,7 @@ export default {
         //分页查询讲师
         getList(page = 1){
             this.page = page;
-            teacher.pageList(this.page,this.limit,this.teacherQuery)
+            teacherApi.pageList(this.page,this.limit,this.teacherQuery)
             .then(response => {
                 this.list = response.data.rows
                 this.total = response.data.total
@@ -128,7 +128,7 @@ export default {
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(() =>{
-                teacher.deleteById(id)
+                teacherApi.deleteById(id)
                 .then(() =>{
                   //提示信息
                   this.$message({
