@@ -9,15 +9,32 @@ export default{
             data:teacherQuery
           })
     },
+    //根据ID删除讲师
     deleteById(id){
         return request({
             url: `/eduservice/edu-teacher/delete/${id}`,
             method: 'delete'
           })
     },
+    //新增讲师
     save(teacher){
         return request({
             url: `/eduservice/edu-teacher/save`,
+            method: 'post',
+            data:teacher
+          })
+    },
+    //根据ID获取讲师
+    findById(id){
+        return request({
+            url: `/eduservice/edu-teacher/findById/${id}`,
+            method: 'get'
+          })
+    },
+    //根据ID修改讲师
+    updateById(teacher){
+        return request({
+            url: `/eduservice/edu-teacher/update`,
             method: 'post',
             data:teacher
           })
