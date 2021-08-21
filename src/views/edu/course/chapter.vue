@@ -76,11 +76,11 @@ export default {
 },
         previous(){
             //跳转到第一步
-            this.$router.push({path:'/edu/course/info/'+1})
+            this.$router.push({path:'/edu/course/info/'+this.courseId})
         },
         next(){
              //跳转到第三步
-            this.$router.push({path:'/edu/course/publish/'+1})
+            this.$router.push({path:'/edu/course/publish/'+this.courseId})
         }
     }
 }

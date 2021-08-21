@@ -87,6 +87,7 @@ export default {
                 cover: '/static/default.png',
                 price: 0
             },
+            courseId: '',
             teacherList:[],
             subjectNestedList:[],//一级分类列表
             subSubjectList:[],//二级分类列表
@@ -95,12 +96,45 @@ export default {
         }
     },
     created(){
-        //初始化所有讲师
-        this.getTeacherList()
         //初始化课程分类
         this.getSubjectNestedList()
+        //初始化所有讲师
+        this.getTeacherList()
+        // 数据回显
+        if(this.$route.params && this.$route.params.id){
+          this.courseId = this.$route.params.id
+          this.getCourseInfo()
+        }
     },
+    watch: {  //监听
+    //路由变化方式，路由发生变化，方法就会执行
+    $route(to, from) { 
+      this.courseInfo={
+                title: '',
+                subjectId: '',
+                subjectParentId:'',
+                teacherId: '',
+                lessonNum: 0,
+                description: '',
+                cover: '/static/default.png',
+                price: 0
+            }
+      this.courseId=''
+      }
+  },
     methods:{
+         getCourseInfo(){
+            // 根据id获取课程基本信息
+            course.getCourseInfoFormById(this.courseId)
+            .then(response => {
+              this.courseInfo=response.data.courseInfoVo
+              for(let i = 0; i < this.subjectNestedList.length; i++){
+                 if (this.subjectNestedList[i].id === this.courseInfo.subjectParentId){
+                     this.subSubjectList = this.subjectNestedList[i].children
+                 }
+              }
+            })
+        },
         getTeacherList(){
             course.getTeacherList()
             .then(response =>{
@@ -136,7 +170,14 @@ export default {
            return isJPG && isLt2M
           },
         saveOrUpdate(){
-            course.addCourseInfo(this.courseInfo)
+            if(!this.courseId){
+              this.addCourse()
+            }else{
+              this.updateCourse()
+            }
+        },
+        addCourse(){
+          course.addCourseInfo(this.courseInfo)
             .then(response =>{
                  this.$message({
                    type: 'success',
@@ -145,6 +186,18 @@ export default {
                //跳转到第二步
                this.$router.push({path:'/edu/course/chapter/'+response.data.courseId})
             })
+        },
+        updateCourse(){
+          course.updateCourseInfo(this.courseInfo)
+          .then(response =>{
+            //提示信息
+            this.$message({
+              type: 'success',
+              message: '修改课程信息成功!'
+            });
+            //跳转到第二步
+            this.$router.push({path:'/edu/course/chapter/'+this.courseId})
+          })
         }
     }
 }
